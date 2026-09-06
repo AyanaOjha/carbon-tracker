@@ -1,0 +1,297 @@
+:root {
+  --forest: #1B3A2F;
+  --moss: #4A7856;
+  --clay: #C97B4A;
+  --paper: #F7F3EA;
+  --paper-raised: #FCFAF4;
+  --ink: #2B2B26;
+  --ink-soft: #6B6B60;
+  --line: #DAD3C0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+}
+
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+.hidden { display: none; }
+
+/* ---- Masthead ---- */
+.masthead {
+  border-bottom: 2px solid var(--forest);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+
+.kicker {
+  font-size: 13px;
+  color: var(--moss);
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+
+.masthead h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 44px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--forest);
+  letter-spacing: -0.01em;
+}
+
+.subhead {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink-soft);
+  margin: 8px 0 0;
+}
+
+/* ---- Cards ---- */
+.entry-card {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+
+.entry-card h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 18px;
+  color: var(--forest);
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+input, select {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: white;
+  color: var(--ink);
+  width: 100%;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--moss);
+}
+
+.field-row {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.field { flex: 1; min-width: 140px; }
+
+button {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background: var(--ink);
+  color: white;
+}
+
+button.primary {
+  background: var(--forest);
+}
+
+button:hover { opacity: 0.88; }
+
+/* ---- Impact strip ---- */
+.impact-strip {
+  text-align: center;
+  padding: 32px 20px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+
+.impact-number {
+  font-family: 'Fraunces', serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--clay);
+  line-height: 1;
+}
+
+.impact-unit {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-top: 8px;
+}
+
+.impact-note {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 10px 0 0;
+}
+
+/* ---- Weekly bar chart (pure CSS, no library) ---- */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  height: 160px;
+  padding-top: 20px;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.bar-value {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+  height: 14px;
+}
+
+.bar {
+  width: 100%;
+  max-width: 32px;
+  background: var(--moss);
+  border-radius: 3px 3px 0 0;
+  transition: height 0.3s ease;
+}
+
+.bar-label {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 8px;
+}
+
+/* ---- Log entries (journal style, not a table) ---- */
+.log-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.log-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.log-entry:last-child { border-bottom: none; }
+
+.log-entry-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.log-entry-date {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.log-entry-detail {
+  font-size: 15px;
+  margin-top: 2px;
+}
+
+.log-entry-co2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  color: var(--moss);
+  white-space: nowrap;
+  margin-right: 14px;
+}
+
+.log-entry-actions button {
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 12px;
+  padding: 4px 8px;
+  font-weight: 500;
+}
+
+.log-entry-actions button:hover { color: var(--ink); }
+
+.empty-note {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* ---- Leaderboard ---- */
+.leaderboard {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: rank;
+}
+
+.leaderboard li {
+  counter-increment: rank;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+}
+
+.leaderboard li:last-child { border-bottom: none; }
+
+.leaderboard li::before {
+  content: counter(rank) ".";
+  color: var(--ink-soft);
+  margin-right: 10px;
+  font-weight: 600;
+}
+
+/* ---- Footer ---- */
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 40px;
+}
+
+@media (max-width: 480px) {
+  .masthead h1 { font-size: 32px; }
+  .impact-number { font-size: 42px; }
+}

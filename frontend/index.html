@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commute Log — Carbon Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="page">
+
+    <header class="masthead">
+      <p class="kicker">a daily record</p>
+      <h1>Commute Log</h1>
+      <p class="subhead">Every trip has a cost. Some cost less than others.</p>
+    </header>
+
+    <section id="login-section" class="entry-card">
+      <label for="userNameInput">Whose log is this?</label>
+      <div class="input-row">
+        <input type="text" id="userNameInput" placeholder="Your name">
+        <button onclick="setUser()">Open my log</button>
+      </div>
+    </section>
+
+    <main id="app-section" class="hidden">
+
+      <section class="entry-card">
+        <h2>Add today's trip</h2>
+        <form id="logForm">
+          <div class="field-row">
+            <div class="field">
+              <label for="dateInput">Date</label>
+              <input type="date" id="dateInput" required>
+            </div>
+            <div class="field">
+              <label for="modeInput">How did you travel</label>
+              <select id="modeInput" required>
+                <option value="">Choose one</option>
+                <option value="walk">On foot</option>
+                <option value="bike">Bicycle</option>
+                <option value="bus">Bus</option>
+                <option value="train">Train</option>
+                <option value="car">Car</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="distanceInput">Distance (km)</label>
+              <input type="number" id="distanceInput" min="0" step="0.1" placeholder="0.0" required>
+            </div>
+          </div>
+          <button type="submit" class="primary">Record trip</button>
+        </form>
+      </section>
+
+      <section class="impact-strip">
+        <div class="impact-number">
+          <span id="totalImpact">0</span>
+          <span class="impact-unit">kg CO₂ saved so far</span>
+        </div>
+        <p class="impact-note">measured against the same trips taken by car</p>
+      </section>
+
+      <section class="entry-card">
+        <h2>This week, at a glance</h2>
+        <div id="weekChart" class="bar-chart"></div>
+      </section>
+
+      <section class="entry-card">
+        <h2>Recent entries</h2>
+        <div id="logsList" class="log-list"></div>
+      </section>
+
+      <section class="entry-card">
+        <h2>Who's saved the most</h2>
+        <ol id="leaderboardList" class="leaderboard"></ol>
+      </section>
+
+    </main>
+
+    <footer>
+      <p>Emission estimates use standard per-km averages (DEFRA/EPA transport factors). Actual figures vary by vehicle and load.</p>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

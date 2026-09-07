@@ -1,6 +1,6 @@
 // ===== SETUP =====
 // Change this to your deployed backend URL once you deploy it on Render.
-const API_URL = 'http://localhost:5000/api/logs';
+const API_URL = 'https://carbon-tracker-gzkh.onrender.com/api/logs';
 
 let currentUser = '';
 

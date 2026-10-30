@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Commute Log — Carbon Tracker</title>
+<title>Commute Log — Carbon Tracker (DA3 Cloud & Security)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,19 +13,31 @@
   <div class="page">
 
     <header class="masthead">
-      <p class="kicker">a daily record</p>
+      <div class="masthead-top">
+        <p class="kicker">a daily record · smart mobility</p>
+        <div id="auth-status-bar" class="auth-bar">
+          <span id="userBadge" class="user-badge hidden"></span>
+          <button id="authBtn" class="secondary-btn" onclick="openAuthModal()">Sign In / Register</button>
+          <button id="mfaSetupBtn" class="secondary-btn hidden" onclick="startMfaSetup()">Setup 2FA</button>
+          <button id="logoutBtn" class="secondary-btn hidden" onclick="logout()">Sign Out</button>
+        </div>
+      </div>
       <h1>Commute Log</h1>
       <p class="subhead">Every trip has a cost. Some cost less than others.</p>
     </header>
 
+    <!-- Quick User / Guest Access -->
     <section id="login-section" class="entry-card">
+      <h2>Open Your Commute Journal</h2>
       <label for="userNameInput">Whose log is this?</label>
       <div class="input-row">
-        <input type="text" id="userNameInput" placeholder="Your name">
+        <input type="text" id="userNameInput" placeholder="Enter your name (e.g., Alex)">
         <button onclick="setUser()">Open my log</button>
       </div>
+      <p class="auth-hint">Tip: For Role-Based Access (Edit & Delete permissions) and TOTP 2FA, please <a href="javascript:void(0)" onclick="openAuthModal()">Sign In or Register</a>.</p>
     </section>
 
+    <!-- Main App Section -->
     <main id="app-section" class="hidden">
 
       <section class="entry-card">
@@ -40,11 +52,11 @@
               <label for="modeInput">How did you travel</label>
               <select id="modeInput" required>
                 <option value="">Choose one</option>
-                <option value="walk">On foot</option>
-                <option value="bike">Bicycle</option>
-                <option value="bus">Bus</option>
-                <option value="train">Train</option>
-                <option value="car">Car</option>
+                <option value="walk">On foot (0 kg CO₂/km)</option>
+                <option value="bike">Bicycle (0 kg CO₂/km)</option>
+                <option value="bus">Bus (0.105 kg CO₂/km)</option>
+                <option value="train">Train (0.041 kg CO₂/km)</option>
+                <option value="car">Car (0.192 kg CO₂/km)</option>
               </select>
             </div>
             <div class="field">
@@ -70,19 +82,96 @@
       </section>
 
       <section class="entry-card">
-        <h2>Recent entries</h2>
+        <div class="card-header-flex">
+          <h2>Recent entries</h2>
+          <span class="rbac-notice">Edit/Delete requires <strong>Supervisor</strong> role</span>
+        </div>
         <div id="logsList" class="log-list"></div>
       </section>
 
       <section class="entry-card">
-        <h2>Who's saved the most</h2>
+        <h2>Who's saved the most (Leaderboard)</h2>
         <ol id="leaderboardList" class="leaderboard"></ol>
       </section>
 
     </main>
 
+    <!-- Auth Modal (Login / Register / MFA) -->
+    <div id="authModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+
+        <div class="modal-tabs">
+          <button id="tabLogin" class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+          <button id="tabRegister" class="tab-btn" onclick="switchTab('register')">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
+          <div class="field">
+            <label for="loginUsername">Username</label>
+            <input type="text" id="loginUsername" required placeholder="Your username">
+          </div>
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="primary w-full">Sign In</button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="auth-form hidden" onsubmit="handleRegister(event)">
+          <div class="field">
+            <label for="regUsername">Username</label>
+            <input type="text" id="regUsername" required placeholder="e.g. sarah_fleet">
+          </div>
+          <div class="field">
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" required placeholder="sarah@smartcity.org">
+          </div>
+          <div class="field">
+            <label for="regPassword">Password (Salted & Hashed with bcrypt)</label>
+            <input type="password" id="regPassword" required placeholder="Strong password">
+          </div>
+          <div class="field">
+            <label for="regRole">Role (Access Control)</label>
+            <select id="regRole" required>
+              <option value="commuter">Commuter (Log trips, view records)</option>
+              <option value="supervisor">Supervisor (Authorized to Edit/Delete)</option>
+            </select>
+          </div>
+          <button type="submit" class="primary w-full">Create Account</button>
+        </form>
+
+        <!-- TOTP MFA Challenge Step -->
+        <div id="mfaChallengeSection" class="auth-form hidden">
+          <h3>Two-Factor Authentication</h3>
+          <p class="mfa-info">Enter the 6-digit code from Google/Microsoft Authenticator:</p>
+          <div class="field">
+            <input type="text" id="totpInput" maxlength="6" placeholder="123456" class="totp-field">
+          </div>
+          <button type="button" class="primary w-full" onclick="submitMfaLogin()">Verify & Login</button>
+        </div>
+
+        <!-- MFA Setup Section (QR Code) -->
+        <div id="mfaSetupSection" class="auth-form hidden">
+          <h3>Set Up Multi-Factor Authentication</h3>
+          <p class="mfa-info">Scan this QR code with <strong>Google Authenticator</strong> or Microsoft Authenticator:</p>
+          <div id="qrCodeContainer" class="qr-container"></div>
+          <p class="manual-secret">Manual Key: <code id="manualSecret"></code></p>
+          <div class="field">
+            <label for="verifyTotpInput">Confirm 6-Digit Code</label>
+            <input type="text" id="verifyTotpInput" maxlength="6" placeholder="000000" class="totp-field">
+          </div>
+          <button type="button" class="primary w-full" onclick="confirmMfaSetup()">Activate 2FA</button>
+        </div>
+
+      </div>
+    </div>
+
     <footer>
-      <p>Emission estimates use standard per-km averages (DEFRA/EPA transport factors). Actual figures vary by vehicle and load.</p>
+      <p>BACSE344 Cloud Infrastructure & Architecture · Scaled Multi-Instance Deployment & Zero-Trust Security</p>
+      <p>Emission factors: DEFRA/EPA standard averages. Data protection: GDPR compliant with Salted bcrypt & TOTP 2FA.</p>
     </footer>
 
   </div>

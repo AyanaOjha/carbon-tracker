@@ -1,0 +1,25 @@
+# ============================================================
+# Unhardened Baseline Dockerfile (Vulnerable / Insecure)
+# Flaws:
+# 1. Heavy base image (full Debian/Ubuntu with extra utilities)
+# 2. Runs as root (UID 0), granting full container privileges
+# 3. Copies all files and dev dependencies
+# 4. No security health check or privilege drop
+# ============================================================
+
+FROM node:20
+
+WORKDIR /app
+
+# Copies everything including dev dependencies
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+# Runs with full root privileges (Security Risk)
+USER root
+
+EXPOSE 5000
+
+CMD ["node", "server.js"]

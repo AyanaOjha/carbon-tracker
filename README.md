@@ -1,6 +1,3 @@
-# Carbon Footprint Tracker — Digital Assignment 3
-> **BACSE344: Cloud Infrastructure & Architecture (Slot C2)**
-> **Key Deliverables:** [ASSIGNMENT_3_REPORT.md](ASSIGNMENT_3_REPORT.md) · [DEMO_VIDEO_SCRIPT.md](DEMO_VIDEO_SCRIPT.md) · Git Branch: `assignment-3`
 
 A scalable, secure full-stack cloud application to log daily commutes, calculate real-time CO2 savings against passenger car baselines, and maintain public leaderboards.
 
